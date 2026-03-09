@@ -1,0 +1,189 @@
+/* src/styles/main.css */
+
+:root {
+  --bg-color: #FAFAFA;
+  --text-color: black;
+  --link-color: #5a7a5a;
+  --border-color: #eee;
+  --secondary-text: #777;
+  --code-bg: #eee;
+  --code-text: maroon;
+  --footer-bg: #FAFAFA;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #181818;
+    --text-color: #ddd;
+    --link-color: #7a9a7a;
+    --border-color: #333;
+    --secondary-text: #999;
+    --code-bg: rgb(0, 51, 56);
+    --code-text: lightgray;
+    --footer-bg: #181818;
+  }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  line-height: 1.6;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--code-text);
+  background: var(--code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.site-title {
+  font-size: 2rem;
+  text-align: center;
+  margin: 0;
+  font-weight: normal;
+}
+
+.site-title b {
+  color: var(--link-color);
+}
+
+.site-title .noodle {
+  font-size: 1.8rem;
+  vertical-align: middle;
+}
+
+/* Add a container for consistent width */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+h1,
+h2 {
+  font-weight: 600;
+}
+
+section {
+  padding: 1.5rem 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+h2 {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+section > p {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+section > p:nth-child(1) {
+  font-size: 0.875rem;
+}
+
+section > p:nth-child(2) {
+  font-size: 1rem;
+}
+
+.camera-tags {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+  margin-top: 1rem;
+}
+
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.grid-item {
+  margin: 0;
+  padding: 0;
+  flex: 1 1 calc(33.333% - 0.67rem); /* Grow to fill space */
+  min-width: 250px;
+}
+
+.grid-item img {
+  width: 100%;
+  height: 250px; /* Fixed height for consistent cropping */
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.grid-item img:hover {
+  transform: scale(1.05);
+}
+
+/* Photoswipe Styling Adjustments */
+.pswp__bg {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.details {
+  /* Style for the details section */
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+  line-height: 1.4;
+}
+
+.details p {
+  margin: 0.25rem 0; /* Adjust spacing between lines */
+}
+
+.details i {
+  margin-right: 0.5rem; /* Space between icon and text */
+}
+
+.tags {
+  margin-top: 0.5rem; /* Add some space above the tags */
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  margin: 0 0.25rem 0.25rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+footer.site-footer {
+  width: 100%;
+  padding: 1.5rem 0;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  background: var(--footer-bg);
+  font-size: 0.95rem;
+  margin-top: auto;
+}
+
+.footer-site {
+  font-size: 0.7rem;
+  color: var(--secondary-text);
+}
