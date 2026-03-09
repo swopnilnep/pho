@@ -1,0 +1,56 @@
+[
+    {
+        "title": "Cape Disappointment",
+        "description": "20 feet waves of the Washington / Oregon Coast with Lewis & Clark National Park in the distance",
+        "date": "Dec 12 2024",
+        "location": "Cape Deception State Park, Washington",
+        "camera": "SONY ILCE-7C",
+        "tags": [
+            "travel",
+            "landscape"
+        ],
+        "images": [
+            "images/waves-1.jpg",
+            "images/waves-2.jpg",
+            "images/waves-3.jpg",
+            "images/waves-4.jpg"
+        ]
+    },
+    {
+        "title": "A Great and Salty Lake",
+        "description": "The cold hits Utah",
+        "date": "Dec 12 2024",
+        "location": "Salt Lake City, Utah",
+        "camera": "SONY ILCE-7C",
+        "tags": [
+            "travel",
+            "landscape"
+        ],
+        "images": [
+            "images/utah-1.jpg",
+            "images/utah-2.jpg",
+            "images/utah-3.jpg"
+        ]
+    },
+    {
+        "title": "Washington's Northern Lights",
+        "description": "A year filled with red, green, blue dancing skies",
+        "date": "Dec 12 2024",
+        "location": "Edmonds, Washington",
+        "camera": "SONY ILCE-7C",
+        "tags": [
+            "travel",
+            "landscape"
+        ],
+        "images": [
+            "images/aurora-1.jpg",
+            "images/aurora-2.jpg",
+            "images/aurora-3.jpg",
+            "images/aurora-4.jpg",
+            "images/aurora-5.jpg",
+            "images/aurora-6.jpg",
+            "images/aurora-7.jpg",
+            "images/aurora-8.jpg"
+        ]
+    }
+]

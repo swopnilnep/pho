@@ -1,0 +1,40 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+  {% for section in photos %}
+    <section id="{{ section.title | slugify }}"> 
+      <h2>{{ section.title }}</h2>
+      {% if section.description %}
+        <p>{{ section.description }}</p>
+      {% endif %}
+
+      <div class="gallery-grid"> 
+        {% for image in section.images %}
+          <figure class="grid-item">
+            <a href="{{ image }}" data-pswp-width="1920" data-pswp-height="1080"> 
+              <img src="{{ image }}" alt="{{ section.title }}" loading="lazy">
+            </a>
+          </figure>
+        {% endfor %}
+      </div>
+
+      <div class="details"> 
+        <p><i class="fas fa-calendar-alt"></i> {{ section.date }}</p> 
+        {% if section.location %}
+          <p><i class="fas fa-map-marker-alt"></i> {{ section.location }}</p> 
+        {% endif %}
+        {% if section.camera %}
+          <p><i class="fas fa-camera"></i> {{ section.camera }}</p> 
+        {% endif %}
+        {% if section.tags %}
+          <p class="tags">
+            {% for tag in section.tags %}
+              <span class="tag">{{ tag }}</span> 
+            {% endfor %}
+          </p>
+        {% endif %}
+      </div>
+
+    </section>
+  {% endfor %}
+{% endblock %}
