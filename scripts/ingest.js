@@ -3,11 +3,11 @@
 //
 //   npm run ingest -- <folder> [--title "Album Title"] [--tags travel,landscape]
 //
-// For each image it reads EXIF (camera, capture date, GPS), copies the file
-// into src/images/ under an album slug, and prepends a new album entry to
-// src/_data/photos.json. Camera and date are auto-filled from EXIF; location
-// is reverse-geocoded from GPS when present. You only fill in title (if not
-// passed) and description afterwards.
+// Creates src/albums/<slug>/, copies the images in, and writes an album.json
+// with metadata. Camera and date are auto-filled from EXIF; location is
+// reverse-geocoded from GPS when present. The album then renders automatically
+// (see src/_data/photos.js) — you only fill in description (and title if not
+// passed) in the generated album.json.
 //
 // Note: the EXIF stays on the *source* copy only — eleventy-img strips metadata
 // from every variant it serves, so nothing public leaks capture coordinates.
@@ -17,8 +17,7 @@ const path = require("path");
 const exifr = require("exifr");
 
 const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png"]);
-const IMAGES_DIR = path.join(__dirname, "..", "src", "images");
-const PHOTOS_JSON = path.join(__dirname, "..", "src", "_data", "photos.json");
+const ALBUMS_DIR = path.join(__dirname, "..", "src", "albums");
 const DEFAULT_TAGS = ["travel", "landscape"];
 
 function parseArgs(argv) {
@@ -45,7 +44,7 @@ function slugify(s) {
 
 function formatDate(d) {
   if (!d || isNaN(d)) return "";
-  // Match the existing "Mon D YYYY" style in photos.json (no comma).
+  // Match the "Mon D YYYY" style used in album.json (no comma).
   return d
     .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     .replace(",", "");
@@ -95,6 +94,12 @@ async function main() {
   const slug = slugify(title);
   const tags = args.tags ? args.tags.split(",").map((t) => t.trim()) : DEFAULT_TAGS;
 
+  const dest = path.join(ALBUMS_DIR, slug);
+  if (fs.existsSync(dest)) {
+    console.error(`Album already exists: src/albums/${slug} — pick a different --title or remove it first.`);
+    process.exit(1);
+  }
+
   // Read EXIF for each file, then order by capture time.
   const entries = [];
   for (const file of files) {
@@ -127,36 +132,26 @@ async function main() {
     }
   }
 
-  // Copy files into src/images/ as <slug>-<n>.<ext> and collect web paths.
-  fs.mkdirSync(IMAGES_DIR, { recursive: true });
-  const images = entries.map((e, i) => {
+  // Copy files into src/albums/<slug>/ as <slug>-<n>.<ext> (sorted by capture).
+  fs.mkdirSync(dest, { recursive: true });
+  entries.forEach((e, i) => {
     const ext = path.extname(e.file).toLowerCase();
-    const name = `${slug}-${i + 1}${ext}`;
-    fs.copyFileSync(e.file, path.join(IMAGES_DIR, name));
-    return `images/${name}`;
+    fs.copyFileSync(e.file, path.join(dest, `${slug}-${i + 1}${ext}`));
   });
 
-  const album = {
-    title,
-    description: "",
-    date,
-    location,
-    camera,
-    tags,
-    images,
-  };
+  const album = { title, description: "", date, location, camera, tags };
+  fs.writeFileSync(
+    path.join(dest, "album.json"),
+    JSON.stringify(album, null, 4) + "\n"
+  );
 
-  // Prepend as the newest album.
-  const all = JSON.parse(fs.readFileSync(PHOTOS_JSON, "utf8"));
-  all.unshift(album);
-  fs.writeFileSync(PHOTOS_JSON, JSON.stringify(all, null, 4) + "\n");
-
-  console.log(`Ingested ${images.length} image(s) into album "${title}"`);
+  console.log(`Ingested ${entries.length} image(s) into src/albums/${slug}/`);
+  console.log(`  title:    ${title}`);
   console.log(`  date:     ${date || "(none — fill in)"}`);
   console.log(`  camera:   ${camera || "(none — fill in)"}`);
   console.log(`  location: ${location || "(none — fill in)"}`);
   console.log("");
-  console.log("Now edit src/_data/photos.json: set the title (if needed) and description.");
+  console.log(`Now edit src/albums/${slug}/album.json: add a description (and tweak title if needed).`);
 }
 
 main().catch((e) => {
