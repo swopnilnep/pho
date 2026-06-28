@@ -11,9 +11,7 @@
       <div class="gallery-grid"> 
         {% for image in section.images %}
           <figure class="grid-item">
-            <a href="{{ image }}" data-pswp-width="1920" data-pswp-height="1080"> 
-              <img src="{{ image }}" alt="{{ section.title }}" loading="lazy">
-            </a>
+            {% galleryImage image, section.title %}
           </figure>
         {% endfor %}
       </div>
