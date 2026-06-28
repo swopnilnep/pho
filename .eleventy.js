@@ -1,11 +1,18 @@
 // .eleventy.js
+const fs = require("fs");
+const path = require("path");
 const Image = require("@11ty/eleventy-img");
+const exifr = require("exifr");
 
 // Grid thumbnails are displayed small; the lightbox needs a large variant.
 const THUMB_WIDTHS = [400, 800];
 const LIGHTBOX_WIDTH = 2000;
 const FORMATS = ["avif", "webp", "jpeg"];
 const GRID_SIZES = "(min-width: 700px) 30vw, 100vw";
+
+const ALBUMS_DIR = path.join(__dirname, "src", "albums");
+const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png"]);
+const DEFAULT_TAGS = ["travel", "landscape"];
 
 // Generate responsive variants for one source image and return the markup:
 // an <a> (lightbox target, with build-time dimensions for PhotoSwipe) wrapping
@@ -47,10 +54,91 @@ async function galleryImage(src, alt) {
   );
 }
 
+function prettify(name) {
+  return name.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function formatDate(d) {
+  if (!d || isNaN(d)) return "";
+  return d
+    .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    .replace(",", "");
+}
+
+// Auto-discover albums from src/albums/<name>/. Drop a folder of images in and
+// it renders — no config edits. An optional album.json supplies title/
+// description/location/tags; date and camera fall back to EXIF. Newest first.
+//
+// NOTE: this lives in the config as global data (not src/_data/photos.js) on
+// purpose — a JavaScript file in _data trips an Eleventy 3 + Nunjucks async
+// quirk that breaks the async image shortcode ("next is not a function").
+async function discoverAlbums() {
+  if (!fs.existsSync(ALBUMS_DIR)) return [];
+
+  const dirs = fs
+    .readdirSync(ALBUMS_DIR, { withFileTypes: true })
+    .filter((d) => d.isDirectory());
+
+  const albums = [];
+  for (const dir of dirs) {
+    const folder = path.join(ALBUMS_DIR, dir.name);
+    const files = fs
+      .readdirSync(folder)
+      .filter((f) => IMAGE_EXTS.has(path.extname(f).toLowerCase()))
+      .sort();
+    if (!files.length) continue;
+
+    let meta = {};
+    const metaPath = path.join(folder, "album.json");
+    if (fs.existsSync(metaPath)) {
+      try {
+        meta = JSON.parse(fs.readFileSync(metaPath, "utf8"));
+      } catch (e) {
+        console.warn(`[albums] bad album.json in ${dir.name}: ${e.message}`);
+      }
+    }
+
+    // Fill date/camera from EXIF when album.json doesn't specify them, and
+    // compute a chronological sort key from the newest capture time.
+    let camera = meta.camera || "";
+    let date = meta.date || "";
+    let exifTime = 0;
+    for (const f of files) {
+      let ex = {};
+      try {
+        ex = (await exifr.parse(path.join(folder, f))) || {};
+      } catch {
+        /* unreadable EXIF — skip */
+      }
+      if (ex.DateTimeOriginal) {
+        const t = new Date(ex.DateTimeOriginal).getTime();
+        if (t > exifTime) exifTime = t;
+        if (!date) date = formatDate(new Date(ex.DateTimeOriginal));
+      }
+      if (!camera && ex.Model) camera = `${ex.Make || ""} ${ex.Model}`.trim();
+    }
+
+    albums.push({
+      title: meta.title || prettify(dir.name),
+      description: meta.description || "",
+      date,
+      location: meta.location || "",
+      camera,
+      tags: meta.tags || DEFAULT_TAGS,
+      images: files.map((f) => `albums/${dir.name}/${f}`),
+      sort: Date.parse(date) || exifTime || 0,
+    });
+  }
+
+  albums.sort((a, b) => b.sort - a.sort);
+  return albums;
+}
+
 module.exports = function (eleventyConfig) {
   eleventyConfig.addAsyncShortcode("galleryImage", galleryImage);
+  eleventyConfig.addGlobalData("photos", discoverAlbums);
 
-  // src/images is the *source* for generated variants — no longer copied as-is.
+  // src/albums holds the *source* images for generated variants — not copied.
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("src/scripts");
   eleventyConfig.addPassthroughCopy("src/favicon");
