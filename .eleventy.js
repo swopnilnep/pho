@@ -64,6 +64,20 @@ function prettify(name) {
   return name.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+// Friendly camera names for the metadata pill, e.g. "SONY ILCE-7C" -> "Sony A7C".
+const CAMERA_NAMES = {
+  "ILCE-7C": "Sony A7C",
+  "ILCE-7CM2": "Sony A7C II",
+  "DSC-RX100M7": "Sony RX100 VII",
+};
+function prettifyCamera(camera) {
+  if (!camera) return "";
+  const model = camera.replace(/^sony\s+/i, "").trim();
+  if (CAMERA_NAMES[model]) return CAMERA_NAMES[model];
+  // Fall back to a tidy "Make Model" with the redundant SONY prefix removed.
+  return camera.replace(/^SONY\s+/i, "Sony ").trim();
+}
+
 function formatDate(d) {
   if (!d || isNaN(d)) return "";
   return d
@@ -129,7 +143,7 @@ async function discoverAlbums() {
       description: meta.description || "",
       date,
       location: meta.location || "",
-      camera,
+      camera: prettifyCamera(camera),
       tags: meta.tags || DEFAULT_TAGS,
       images: files.map((f) => `albums/${dir.name}/${f}`),
       sort: Date.parse(date) || exifTime || 0,
@@ -148,6 +162,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("src/scripts");
   eleventyConfig.addPassthroughCopy("src/favicon");
+  eleventyConfig.addPassthroughCopy("src/favicon.svg");
+  eleventyConfig.addPassthroughCopy("src/favicon.png");
   eleventyConfig.addPassthroughCopy("src/og-image.jpg"); // social share preview
 
   return {
