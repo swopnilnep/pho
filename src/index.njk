@@ -8,21 +8,19 @@
         <p>{{ section.description }}</p>
       {% endif %}
 
-      <div class="gallery-grid"> 
+      <div class="gallery-grid">
         {% for image in section.images %}
-          <figure class="grid-item">
-            {% galleryImage image, section.title %}
-          </figure>
+          {% galleryImage image, section.title %}
         {% endfor %}
       </div>
 
-      <div class="details"> 
-        <p><i class="fas fa-calendar-alt"></i> {{ section.date }}</p> 
+      <div class="details">
+        <p><svg class="ic"><use href="#ic-cal"></use></svg> {{ section.date }}</p>
         {% if section.location %}
-          <p><i class="fas fa-map-marker-alt"></i> {{ section.location }}</p> 
+          <p><svg class="ic"><use href="#ic-pin"></use></svg> {{ section.location }}</p>
         {% endif %}
         {% if section.camera %}
-          <p><i class="fas fa-camera"></i> {{ section.camera }}</p> 
+          <p><svg class="ic"><use href="#ic-cam"></use></svg> {{ section.camera }}</p>
         {% endif %}
         {% if section.tags %}
           <p class="tags">

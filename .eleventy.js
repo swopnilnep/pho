@@ -5,10 +5,11 @@ const Image = require("@11ty/eleventy-img");
 const exifr = require("exifr");
 
 // Grid thumbnails are displayed small; the lightbox needs a large variant.
-const THUMB_WIDTHS = [400, 800];
+// 1200 keeps wide justified rows crisp on retina; 2000 is the lightbox target.
+const THUMB_WIDTHS = [400, 800, 1200];
 const LIGHTBOX_WIDTH = 2000;
 const FORMATS = ["avif", "webp", "jpeg"];
-const GRID_SIZES = "(min-width: 700px) 30vw, 100vw";
+const GRID_SIZES = "(min-width: 700px) 45vw, 100vw";
 
 const ALBUMS_DIR = path.join(__dirname, "src", "albums");
 const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png"]);
@@ -45,8 +46,13 @@ async function galleryImage(src, alt) {
   const thumb = pick("jpeg", THUMB_WIDTHS[0]) || metadata.jpeg[0];
   const large = pick("jpeg", LIGHTBOX_WIDTH) || largest("jpeg");
 
+  // Aspect ratio drives the justified-row layout: each tile grows proportional
+  // to --ar so rows fill edge-to-edge without cropping or stretching orphans.
+  const ar = (large.width / large.height).toFixed(4);
+
   return (
-    `<a href="${large.url}" data-pswp-width="${large.width}" data-pswp-height="${large.height}">` +
+    `<a class="grid-item" style="--ar:${ar}" href="${large.url}" ` +
+    `data-pswp-width="${large.width}" data-pswp-height="${large.height}">` +
     `<picture>${sources}` +
     `<img src="${thumb.url}" width="${thumb.width}" height="${thumb.height}" ` +
     `alt="${alt}" loading="lazy" decoding="async">` +
@@ -142,6 +148,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("src/scripts");
   eleventyConfig.addPassthroughCopy("src/favicon");
+  eleventyConfig.addPassthroughCopy("src/og-image.jpg"); // social share preview
 
   return {
     dir: {
