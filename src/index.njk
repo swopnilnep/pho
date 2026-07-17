@@ -2,35 +2,23 @@
 
 {% block content %}
   {% for section in photos %}
-    <section id="{{ section.title | slugify }}"> 
-      <h2>{{ section.title }}</h2>
-      {% if section.description %}
-        <p>{{ section.description }}</p>
-      {% endif %}
+    <section id="{{ section.title | slugify }}">
+      <div class="album-head">
+        <h2>{{ section.title }}</h2>
+        <p class="meta">
+          <em>{{ section.date }}{% if section.location %} · {{ section.location }}{% endif %}</em>
+          {% if section.camera %}<span class="cam">{{ section.camera }}</span>{% endif %}
+        </p>
+        {% if section.description %}
+          <p class="desc">{{ section.description }}</p>
+        {% endif %}
+      </div>
 
       <div class="gallery-grid">
         {% for image in section.images %}
           {% galleryImage image, section.title %}
         {% endfor %}
       </div>
-
-      <div class="details">
-        <p><svg class="ic"><use href="#ic-cal"></use></svg> {{ section.date }}</p>
-        {% if section.location %}
-          <p><svg class="ic"><use href="#ic-pin"></use></svg> {{ section.location }}</p>
-        {% endif %}
-        {% if section.camera %}
-          <p><svg class="ic"><use href="#ic-cam"></use></svg> {{ section.camera }}</p>
-        {% endif %}
-        {% if section.tags %}
-          <p class="tags">
-            {% for tag in section.tags %}
-              <span class="tag">{{ tag }}</span> 
-            {% endfor %}
-          </p>
-        {% endif %}
-      </div>
-
     </section>
   {% endfor %}
 {% endblock %}
