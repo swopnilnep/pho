@@ -12,6 +12,13 @@ npm run ingest -- <folder>      # Import a folder of photos as a new album (see 
 
 There are no tests configured.
 
+## Upstream pipeline (where albums come from)
+
+This repo is the **public, curated** end of a two-stage photo pipeline; the private archive lives in the separate `backup-scripts` repo (`~/Backups/scripts`, symlinked into `~/.local/bin`):
+
+1. **Archive:** `import-photos "Event" --apply` (card → `~/Pictures/Raw/YYYY/<event>/`, collision-proof names, launch-date guard) → edit in DxO PhotoLab (exports to a `./Edits` subfolder) → `backup-nas` (auto-runs `collect-edits`, which consolidates + EXIF-keyword-tags the JPGs into `~/Pictures/Edits/YYYY/<event>/`, then rsyncs raws → NAS `lab` and edits → NAS `homes/Photos` for Synology Photos).
+2. **Publish (this repo):** hand-pick ~10 favorite JPGs from `~/Pictures/Edits/YYYY/<event>/`, then `npm run ingest -- <folder> --title "…"`, fill in the `description`, and push. `ingest` copies *every* file in the given folder (hence the curation step) and expects `.jpg`.
+
 ## Architecture
 
 This is a static photo gallery site built with [Eleventy (11ty)](https://www.11ty.dev/).
