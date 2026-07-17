@@ -6,6 +6,27 @@ Photos live in folders. Add a folder, push, and it publishes itself — image re
 
 ---
 
+## The full pipeline
+
+This gallery is the **public, curated** end of a two-stage flow. The private archive lives elsewhere (the `backup-scripts` repo: `import-photos`, `collect-edits`, `backup-nas`); this repo publishes a handful of favorites from it.
+
+```
+ 📷 card ─ import-photos "Event" ─► ~/Pictures/Raw/YYYY/<event>/   (originals, renamed, date-guarded)
+                                        │ edit in DxO → ./Edits/
+                                        ▼ backup-nas (auto-runs collect-edits)
+              ~/Pictures/Edits/YYYY/<event>/*_DxO.jpg  ─► NAS + Synology Photos   (private archive)
+                                        │
+     ── curate ~10 favorites ──────────┘
+                                        ▼ npm run ingest -- <folder> --title "…"
+                    src/albums/<slug>/ (+ album.json)  ─ git push ─► GitHub Actions ─► pho.swopnil.com
+```
+
+**Stage 1 — archive (every keeper):** `import-photos` → edit in DxO → `backup-nas`. Originals go to cold NAS storage; edited JPGs (event baked into their keywords) land in Synology Photos.
+
+**Stage 2 — publish (a curated few):** hand-pick ~10 edited JPGs into a folder, then `npm run ingest` them here (below). The one manual step is picking favorites — `ingest` copies *every* file in the folder you give it, and wants `.jpg`, not raws. The build strips EXIF/GPS from every served image, so nothing public leaks a location.
+
+---
+
 ## Setup (one time)
 
 You need [Node.js](https://nodejs.org/) 20 or newer.
