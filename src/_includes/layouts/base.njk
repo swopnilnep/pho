@@ -7,6 +7,9 @@
   <meta name="description" content="Photography by Swopnil Shrestha — landscapes, travel, and the occasional aurora.">
   <link rel="canonical" href="https://pho.swopnil.com/">
 
+  <!-- Set the theme before paint to avoid a flash of the wrong mode. -->
+  <script>(function(){try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+
   <!-- Social share preview -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="photos by swopnil">
@@ -19,29 +22,41 @@
   <meta name="twitter:description" content="Photography by Swopnil Shrestha — landscapes, travel, and the occasional aurora.">
   <meta name="twitter:image" content="https://pho.swopnil.com/og-image.jpg">
 
-  <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
-  <link rel="icon" type="image/png" href="/favicon/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
 </head>
 <body>
-  <!-- Inline icon sprite (replaces the Font Awesome CDN — 3 icons, no external request) -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
-    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
-    <symbol id="ic-cam" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
-  </svg>
   <div class="container">
-    <header>
-      <h2 class="site-title"><span class="noodle">🍜</span> <b>pho</b>tos by swopnil</h2>
+    <nav class="site-nav">
+      <div class="nav-links">
+        <a href="https://swopnil.com">Home</a>
+        <a href="https://swopnil.com/work">Work</a>
+        <a href="/" aria-current="page">Photos</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Toggle light / dark theme" title="Toggle theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>
+        </svg>
+      </button>
+    </nav>
+
+    <header class="page-head">
+      <h1>photos</h1>
+      <p class="tagline">Places I’ve wandered, through my lens. <span class="noodle">🍜</span></p>
     </header>
+
     <main>
-      {% block content %}{% endblock %} 
+      {% block content %}{% endblock %}
     </main>
+
     <footer class="site-footer">
       <div class="footer-site">
-        <a href="https://swopnil.com" style="color: inherit; text-decoration: none;">swopnil.com</a>
+        <a href="https://swopnil.com">swopnil.com</a>
       </div>
     </footer>
   </div>
@@ -59,7 +74,6 @@
         <div class="pswp__top-bar">
           <div class="pswp__counter"></div>
           <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-          <button class="pswp__button pswp__button--share" title="Share"></button>
           <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
           <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
           <div class="pswp__preloader">
@@ -82,8 +96,17 @@
     </div>
   </div>
 
+  <script>
+    document.querySelector(".theme-toggle").addEventListener("click", function () {
+      var el = document.documentElement;
+      var cur = el.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      var next = cur === "dark" ? "light" : "dark";
+      el.dataset.theme = next;
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
-  <script src="/scripts/gallery.js"></script> 
+  <script src="/scripts/gallery.js"></script>
 </body>
 </html>
