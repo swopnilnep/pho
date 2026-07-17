@@ -24,6 +24,10 @@
   }
 }
 
+html {
+  overflow-x: hidden; /* guard against any accidental horizontal scroll */
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -33,6 +37,11 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-wrap: break-word; /* long words/URLs never force overflow */
+}
+
+img {
+  max-width: 100%;
 }
 
 a {
@@ -53,7 +62,7 @@ code {
 }
 
 .site-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2rem); /* shrink to fit narrow phones */
   text-align: center;
   margin: 0;
   font-weight: normal;
@@ -115,30 +124,55 @@ section > p:nth-child(2) {
   margin-top: 1rem;
 }
 
+/* Justified rows: each tile grows proportional to its aspect ratio (--ar, set
+   at build time), so rows fill edge-to-edge with photos at their true shape. */
 .gallery-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-bottom: 2rem;
 }
 
+/* Absorbs the leftover space on the last row so a lone tile isn't stretched
+   to full width (which upscaled the thumbnail into a blur). */
+.gallery-grid::after {
+  content: "";
+  flex-grow: 999999;
+}
+
 .grid-item {
+  --row-h: 260px;
   margin: 0;
   padding: 0;
-  flex: 1 1 calc(33.333% - 0.67rem); /* Grow to fill space */
-  min-width: 250px;
+  flex-grow: var(--ar, 1.5);
+  flex-basis: calc(var(--ar, 1.5) * var(--row-h));
+  height: var(--row-h);
+  overflow: hidden; /* keep hover-zoom from spilling over neighbors */
+  border-radius: 3px;
 }
 
 .grid-item img {
   width: 100%;
-  height: 250px; /* Fixed height for consistent cropping */
+  height: 100%;
   display: block;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
-.grid-item img:hover {
-  transform: scale(1.05);
+.grid-item:hover img {
+  transform: scale(1.04);
+}
+
+/* On phones, show each photo full-width at its true aspect ratio (no crop). */
+@media (max-width: 640px) {
+  .grid-item {
+    flex-basis: 100%;
+    height: auto;
+  }
+
+  .grid-item img {
+    height: auto;
+  }
 }
 
 /* Photoswipe Styling Adjustments */
@@ -157,8 +191,17 @@ section > p:nth-child(2) {
   margin: 0.25rem 0; /* Adjust spacing between lines */
 }
 
-.details i {
-  margin-right: 0.5rem; /* Space between icon and text */
+.details .ic {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -2px;
+  margin-right: 0.4rem;
+  opacity: 0.85;
 }
 
 .tags {

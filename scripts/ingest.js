@@ -6,8 +6,8 @@
 // Creates src/albums/<slug>/, copies the images in, and writes an album.json
 // with metadata. Camera and date are auto-filled from EXIF; location is
 // reverse-geocoded from GPS when present. The album then renders automatically
-// (see src/_data/photos.js) — you only fill in description (and title if not
-// passed) in the generated album.json.
+// (album discovery lives in .eleventy.js) — you only fill in description
+// (and title if not passed) in the generated album.json.
 //
 // Note: the EXIF stays on the *source* copy only — eleventy-img strips metadata
 // from every variant it serves, so nothing public leaks capture coordinates.
