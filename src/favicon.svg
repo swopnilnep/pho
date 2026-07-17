@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g fill="#5a7a5a">
+    <!-- ears -->
+    <ellipse cx="12.4" cy="8.6" rx="2.2" ry="6.6" transform="rotate(-15 12.4 8.6)"/>
+    <ellipse cx="19.6" cy="8.6" rx="2.2" ry="6.6" transform="rotate(15 19.6 8.6)"/>
+    <!-- head -->
+    <circle cx="16" cy="16.5" r="6"/>
+    <!-- body -->
+    <ellipse cx="16" cy="24.5" rx="7.4" ry="5.4"/>
+  </g>
+</svg>
