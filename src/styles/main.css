@@ -7,7 +7,15 @@
   --faint: #999;
   --accent: #5a7a5a;
   --line: #e6e6e6;
+  --radius: 8px;
+  --surface-hover: #f1f0ec;
+  --footer-bg: #efeee9;
+  --sans: "Atlas Inter", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
+/* Bundled Inter (SIL OFL, /fonts/): UI text (nav, footer, controls). */
+@font-face { font-family: "Atlas Inter"; src: url("/fonts/inter-latin-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Atlas Inter"; src: url("/fonts/inter-latin-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 
 /* Auto dark — unless the visitor has explicitly forced light. */
 @media (prefers-color-scheme: dark) {
@@ -18,6 +26,8 @@
     --faint: #6a6a6a;
     --accent: #8bab8b;
     --line: #2c2c2c;
+    --surface-hover: #262625;
+    --footer-bg: #0d0d0d;
   }
 }
 
@@ -29,6 +39,8 @@
   --faint: #6a6a6a;
   --accent: #8bab8b;
   --line: #2c2c2c;
+  --surface-hover: #262625;
+  --footer-bg: #0d0d0d;
 }
 
 html {
@@ -70,18 +82,26 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1.75rem;
+  gap: 1rem;
+  padding-top: 1.6rem;
+}
+
+.site-nav, .site-footer, .theme-toggle, button, .album-head .meta, .album-head .cam {
+  font-family: var(--sans);
+}
+
+.nav-links {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .nav-links a {
   color: var(--muted);
-  margin-right: 1.5rem;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-}
-
-.nav-links a:last-child {
-  margin-right: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
 }
 
 .nav-links a:hover {
@@ -89,22 +109,42 @@ a:hover {
   text-decoration: none;
 }
 
-.nav-links a[aria-current="page"] {
-  color: var(--accent);
+.nav-links a[aria-current] {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.45em;
 }
 
 .theme-toggle {
+  flex: none;
   background: none;
-  border: none;
-  padding: 0.35rem;
-  margin: 0;
+  border: 0;
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  margin: 0 -0.5rem 0 0;
   cursor: pointer;
   color: var(--muted);
   line-height: 0;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
 .theme-toggle:hover {
   color: var(--text);
+  background: var(--surface-hover);
+}
+
+a:focus-visible, .theme-toggle:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .site-nav { padding-top: 1.2rem; gap: 0.5rem; }
+  .nav-links { gap: 1.1rem; overflow-x: auto; scrollbar-width: none; padding: 0.4rem 0.25rem 0.5rem 0; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 0.88rem; flex: none; }
 }
 
 /* Page heading */
@@ -230,18 +270,31 @@ section {
   background-color: rgba(0, 0, 0, 0.92);
 }
 
-/* Footer */
+/* Footer — darker full-bleed band (footer sits inside .container, so the
+   band is extended to the viewport edges with a clipped box-shadow). */
 .site-footer {
+  background: var(--footer-bg);
+  box-shadow: 0 0 0 100vmax var(--footer-bg);
+  clip-path: inset(0 -100vmax);
   border-top: 1px solid var(--line);
-  padding: 2rem 0;
+  border-image: conic-gradient(var(--line) 0 0) 1 / 1px 0 0 / 0 100vmax;
+  margin-top: 1rem;
+  padding: 2.75rem 0 3.25rem;
   text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
 }
 
 .footer-site {
-  font-size: 0.8rem;
-  color: var(--faint);
+  font-size: 0.85rem;
 }
 
 .footer-site a {
-  color: inherit;
+  color: var(--text);
+}
+
+.footer-site a:hover {
+  color: var(--accent);
+  text-decoration: none;
 }

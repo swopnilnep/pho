@@ -2,3 +2,7 @@ node_modules
 dist
 .DS_Store
 *.log
+
+# Local planning and context notes (not published)
+CLAUDE.md
+IDEA.md
