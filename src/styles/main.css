@@ -52,7 +52,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  font-family: var(--sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-wrap: break-word;
