@@ -1,15 +1,16 @@
 /* src/styles/main.css: minimalist photo gallery */
 
 :root {
-  --bg: #fafafa;
+  color-scheme: light;
+  --bg: #ffffff;
   --text: #1a1a1a;
+  --text-body: #3d3d3d;
   --muted: #777;
   --faint: #999;
   --accent: #5a7a5a;
   --line: #e6e6e6;
   --radius: 8px;
   --surface-hover: #f1f0ec;
-  --footer-bg: #efeee9;
   --sans: "Atlas Inter", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -20,31 +21,34 @@
 /* Auto dark, unless the visitor has explicitly forced light. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #141414;
+    color-scheme: dark;
+    --bg: #000000;
     --text: #e6e6e6;
+    --text-body: #c7c7c7;
     --muted: #9a9a9a;
     --faint: #6a6a6a;
     --accent: #8bab8b;
     --line: #2c2c2c;
     --surface-hover: #262625;
-    --footer-bg: #0d0d0d;
   }
 }
 
 /* Manual dark override (persisted in localStorage). */
 :root[data-theme="dark"] {
-  --bg: #141414;
+  color-scheme: dark;
+  --bg: #000000;
   --text: #e6e6e6;
+  --text-body: #c7c7c7;
   --muted: #9a9a9a;
   --faint: #6a6a6a;
   --accent: #8bab8b;
   --line: #2c2c2c;
   --surface-hover: #262625;
-  --footer-bg: #0d0d0d;
 }
 
 html {
   overflow-x: hidden;
+  background: var(--bg);
 }
 
 body {

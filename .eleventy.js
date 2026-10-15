@@ -126,7 +126,7 @@ async function discoverAlbums() {
     for (const f of files) {
       let ex = {};
       try {
-        ex = (await exifr.parse(path.join(folder, f))) || {};
+        ex = (await exifr.parse(fs.readFileSync(path.join(folder, f)))) || {};
       } catch {
         /* unreadable EXIF, skip */
       }
