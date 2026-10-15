@@ -6,10 +6,10 @@
 // Creates src/albums/<slug>/, copies the images in, and writes an album.json
 // with metadata. Camera and date are auto-filled from EXIF; location is
 // reverse-geocoded from GPS when present. The album then renders automatically
-// (album discovery lives in .eleventy.js) — you only fill in description
+// (album discovery lives in .eleventy.js); you only fill in description
 // (and title if not passed) in the generated album.json.
 //
-// Note: the EXIF stays on the *source* copy only — eleventy-img strips metadata
+// Note: the EXIF stays on the *source* copy only; eleventy-img strips metadata
 // from every variant it serves, so nothing public leaks capture coordinates.
 
 const fs = require("fs");
@@ -96,7 +96,7 @@ async function main() {
 
   const dest = path.join(ALBUMS_DIR, slug);
   if (fs.existsSync(dest)) {
-    console.error(`Album already exists: src/albums/${slug} — pick a different --title or remove it first.`);
+    console.error(`Album already exists: src/albums/${slug}; pick a different --title or remove it first.`);
     process.exit(1);
   }
 
@@ -107,7 +107,7 @@ async function main() {
     try {
       exif = (await exifr.parse(file, { gps: true })) || {};
     } catch {
-      /* unreadable EXIF — still ingest the file */
+      /* unreadable EXIF, still ingest the file */
     }
     entries.push({ file, exif, date: exif.DateTimeOriginal });
   }
@@ -147,9 +147,9 @@ async function main() {
 
   console.log(`Ingested ${entries.length} image(s) into src/albums/${slug}/`);
   console.log(`  title:    ${title}`);
-  console.log(`  date:     ${date || "(none — fill in)"}`);
-  console.log(`  camera:   ${camera || "(none — fill in)"}`);
-  console.log(`  location: ${location || "(none — fill in)"}`);
+  console.log(`  date:     ${date || "(none; fill in)"}`);
+  console.log(`  camera:   ${camera || "(none; fill in)"}`);
+  console.log(`  location: ${location || "(none; fill in)"}`);
   console.log("");
   console.log(`Now edit src/albums/${slug}/album.json: add a description (and tweak title if needed).`);
 }

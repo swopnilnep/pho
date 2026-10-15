@@ -86,11 +86,11 @@ function formatDate(d) {
 }
 
 // Auto-discover albums from src/albums/<name>/. Drop a folder of images in and
-// it renders — no config edits. An optional album.json supplies title/
+// it renders; no config edits. An optional album.json supplies title/
 // description/location/tags; date and camera fall back to EXIF. Newest first.
 //
 // NOTE: this lives in the config as global data (not src/_data/photos.js) on
-// purpose — a JavaScript file in _data trips an Eleventy 3 + Nunjucks async
+// purpose; a JavaScript file in _data trips an Eleventy 3 + Nunjucks async
 // quirk that breaks the async image shortcode ("next is not a function").
 async function discoverAlbums() {
   if (!fs.existsSync(ALBUMS_DIR)) return [];
@@ -128,7 +128,7 @@ async function discoverAlbums() {
       try {
         ex = (await exifr.parse(path.join(folder, f))) || {};
       } catch {
-        /* unreadable EXIF — skip */
+        /* unreadable EXIF, skip */
       }
       if (ex.DateTimeOriginal) {
         const t = new Date(ex.DateTimeOriginal).getTime();
@@ -158,7 +158,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addAsyncShortcode("galleryImage", galleryImage);
   eleventyConfig.addGlobalData("photos", discoverAlbums);
 
-  // src/albums holds the *source* images for generated variants — not copied.
+  // src/albums holds the *source* images for generated variants, not copied.
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("src/scripts");
   eleventyConfig.addPassthroughCopy("src/fonts");

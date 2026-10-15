@@ -1,4 +1,4 @@
-/* src/styles/main.css — minimalist photo gallery */
+/* src/styles/main.css: minimalist photo gallery */
 
 :root {
   --bg: #fafafa;
@@ -17,7 +17,7 @@
 @font-face { font-family: "Atlas Inter"; src: url("/fonts/inter-latin-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Atlas Inter"; src: url("/fonts/inter-latin-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 
-/* Auto dark — unless the visitor has explicitly forced light. */
+/* Auto dark, unless the visitor has explicitly forced light. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #141414;

@@ -1,8 +1,8 @@
 # pho 🍜
 
-**pho**-tos — a simple, fast static photo gallery built with [Eleventy](https://www.11ty.dev/) and [PhotoSwipe](https://photoswipe.com/). Live at **[pho.swopnil.com](https://pho.swopnil.com)**.
+**pho**-tos, a simple, fast static photo gallery built with [Eleventy](https://www.11ty.dev/) and [PhotoSwipe](https://photoswipe.com/). Live at **[pho.swopnil.com](https://pho.swopnil.com)**.
 
-Photos live in folders. Add a folder, push, and it publishes itself — image resizing, format conversion, metadata, and deployment are all automatic.
+Photos live in folders. Add a folder, push, and it publishes itself; image resizing, format conversion, metadata, and deployment are all automatic.
 
 ---
 
@@ -21,9 +21,9 @@ This gallery is the **public, curated** end of a two-stage flow. The private arc
                     src/albums/<slug>/ (+ album.json)  ─ git push ─► GitHub Actions ─► pho.swopnil.com
 ```
 
-**Stage 1 — archive (every keeper):** `import-photos` → edit in DxO → `backup-nas`. Originals go to cold NAS storage; edited JPGs (event baked into their keywords) land in Synology Photos.
+**Stage 1 archive (every keeper):** `import-photos` → edit in DxO → `backup-nas`. Originals go to cold NAS storage; edited JPGs (event baked into their keywords) land in Synology Photos.
 
-**Stage 2 — publish (a curated few):** hand-pick ~10 edited JPGs into a folder, then `npm run ingest` them here (below). The one manual step is picking favorites — `ingest` copies *every* file in the folder you give it, and wants `.jpg`, not raws. The build strips EXIF/GPS from every served image, so nothing public leaks a location.
+**Stage 2 publish (a curated few):** hand-pick ~10 edited JPGs into a folder, then `npm run ingest` them here (below). The one manual step is picking favorites; `ingest` copies *every* file in the folder you give it, and wants `.jpg`, not raws. The build strips EXIF/GPS from every served image, so nothing public leaks a location.
 
 ---
 
@@ -55,7 +55,7 @@ npm run build      # writes the site to dist/
 
 Each album is a folder under `src/albums/`. There are two ways to create one.
 
-### Option A — Ingest a folder (recommended)
+### Option A: Ingest a folder (recommended)
 
 Point the ingest command at a folder of photos straight off your camera or export:
 
@@ -90,7 +90,7 @@ Then open the generated `src/albums/<slug>/album.json` and **add a description**
 | `--tags a,b,c` | Comma-separated tags | `travel, landscape` |
 | `--location "..."` | Override the location instead of geocoding GPS | from GPS, if present |
 
-### Option B — Drop a folder in by hand
+### Option B: Drop a folder in by hand
 
 1. Create `src/albums/<your-album-name>/`.
 2. Put your image files (`.jpg`, `.jpeg`, `.png`) in it.
@@ -102,7 +102,7 @@ With no `album.json`, the album still works: the title comes from the folder nam
 
 ### `album.json` fields
 
-All fields are optional — anything you leave out is filled from EXIF or sensible defaults.
+All fields are optional; anything you leave out is filled from EXIF or sensible defaults.
 
 | Field | Description |
 |---|---|
