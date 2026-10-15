@@ -111,18 +111,7 @@ a:hover {
 
 .nav-links a[aria-current] {
   color: var(--text);
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.45em;
 }
-
-.nav-links a.wordmark {
-  color: var(--text);
-  letter-spacing: 0.14em;
-  margin-right: 0.6rem;
-}
-.nav-links a.wordmark[aria-current] { text-decoration: none; }
 
 .theme-toggle {
   flex: none;
@@ -292,31 +281,25 @@ section {
   background-color: rgba(0, 0, 0, 0.92);
 }
 
-/* Footer — darker full-bleed band (footer sits inside .container, so the
-   band is extended to the viewport edges with a clipped box-shadow). */
+/* Footer: copyright left, links right (matches swopnil.com) */
 .site-footer {
-  background: var(--footer-bg);
-  box-shadow: 0 0 0 100vmax var(--footer-bg);
-  clip-path: inset(0 -100vmax);
+  margin-top: 3rem;
   border-top: 1px solid var(--line);
-  border-image: conic-gradient(var(--line) 0 0) 1 / 1px 0 0 / 0 100vmax;
-  margin-top: 1rem;
-  padding: 2.75rem 0 3.25rem;
-  text-align: center;
   color: var(--muted);
-  font-size: 0.8rem;
-  line-height: 1.6;
-}
-
-.footer-site {
   font-size: 0.85rem;
 }
-
-.footer-site a {
-  color: var(--text);
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 1.25rem 0 1.75rem;
 }
-
-.footer-site a:hover {
-  color: var(--accent);
-  text-decoration: none;
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
 }
+.footer-links a { color: var(--muted); }
+.footer-links a:hover { color: var(--text); text-decoration: none; }
